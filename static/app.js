@@ -4,7 +4,8 @@
 
     const tableConfig = [
       {
-        rowNum: 10
+        rowNum: 10,
+        skipTotal: true
       },
       {
         rowNum: 7,
@@ -15,19 +16,25 @@
         reverse: true
       },
       {
-        rowNum: 8
+        rowNum: 8,
+        reverse: true
       },
       {
-        rowNum: 4
+        rowNum: 4,
+        reverse: true
       },
       {
-        rowNum: 7
+        rowNum: 7,
+        reverse: true
       },
       {
-        rowNum: 9
+        rowNum: 9,
+        reverse: true
       },
       {
-        rowNum: 10
+        rowNum: 10,
+        reverse: true,
+        skipTotal: true
       }
     ];
 
@@ -81,10 +88,11 @@
       let total = 0;
       tableConfig.forEach((config, index) => {
         const {
-          reverse
+          reverse,
+          skipTotal
         } = config || {};
         const subtotal = getSubTotal(index, reverse);
-        total += subtotal;
+        total += skipTotal ? 0 : subtotal;
       });
       return total;
     };
