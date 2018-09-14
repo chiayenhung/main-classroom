@@ -5,36 +5,44 @@
     const tableConfig = [
       {
         rowNum: 10,
-        skipTotal: true
+        skipTotal: true,
+        title: "SOC"
       },
       {
         rowNum: 7,
-        reverse: true
+        reverse: true,
+        title: "VIS"
       },
       {
         rowNum: 7,
-        reverse: true
+        reverse: true,
+        title: "HEA"
       },
       {
         rowNum: 8,
-        reverse: true
+        reverse: true,
+        title: "TOU"
       },
       {
         rowNum: 4,
-        reverse: true
+        reverse: true,
+        title: "Items"
       },
       {
         rowNum: 7,
-        reverse: true
+        reverse: true,
+        title: "BOD"
       },
       {
         rowNum: 9,
-        reverse: true
+        reverse: true,
+        title: "BAL"
       },
       {
         rowNum: 10,
         reverse: true,
-        skipTotal: true
+        skipTotal: true,
+        title: "PLA"
       }
     ];
 
@@ -113,7 +121,8 @@
     };
 
     const getHeaders = (tableNum) => {
-      return "<thead><tr><th scope=\"col\">#</th><th scope=\"col\">Answer</th><th><span>Sub total:</span><span class=\"table" + tableNum +"\"></span></th></tr></thead>";
+      const title = tableConfig[tableNum].title;
+      return "<thead><tr><th scope=\"col\">" + title + "</th><th scope=\"col\">Answer</th><th><span>Sub total:</span><span class=\"table" + tableNum +"\"></span></th></tr></thead>";
     };
 
     const getOption = (config, index, rowNum, rowConfig, rowIndex) => {
