@@ -2,7 +2,56 @@
   function () {
     const container = $(".container");
 
-    const tableConfig = [
+    const homeConfig = [
+      {
+        rowNum: 10,
+        skipTotal: true,
+        title: "SOC"
+      },
+      {
+        rowNum: 11,
+        reverse: true,
+        title: "VIS"
+      },
+      {
+        rowNum: 8,
+        reverse: true,
+        title: "HEA"
+      },
+      {
+        rowNum: 11,
+        reverse: true,
+        title: "TOU"
+      },
+      {
+        rowNum: 5,
+        reverse: true,
+        title: "Items"
+      },
+      {
+        rowNum: 10,
+        reverse: true,
+        title: "BOD"
+      },
+      {
+        rowNum: 11,
+        reverse: true,
+        title: "BAL",
+        special: {
+          1: {
+            reverse: false
+          }
+        }
+      },
+      {
+        rowNum: 9,
+        reverse: true,
+        skipTotal: true,
+        title: "PLA"
+      }
+    ];
+
+    const classRoomConfig  = [
       {
         rowNum: 10,
         skipTotal: true,
@@ -65,18 +114,29 @@
       }
     ];
 
-    const data = [];
+    let tableConfig = null;
 
-    const getSubTotal = (index, reverse = false) => {
+    let data = [];
+
+    // const isSpecial = ()
+
+    const getSubTotal = (index, config) => {
       if (!data[index] || !data[index].length) {
         return 0;
       }
-      return data[index].reduce((current, name) => {
+      const {
+        reverse = false,
+        special
+      } = config || {};
+      return data[index].reduce((current, name, index) => {
         const optionIndex = optionConfig.findIndex((config) => {
           return config.name === name;
         });
         if (optionIndex === -1) {
           return current;
+        }
+        if (special && special[index]) {
+          return (!!special[index].reverse ? optionIndex + 1 : 4 - optionIndex) + current;
         }
         return (reverse ? optionIndex + 1 : 4 - optionIndex) + current;
       }, 0);
@@ -84,10 +144,7 @@
 
     const renderSubTotals = () => {
       tableConfig.forEach((config, index) => {
-        const {
-          reverse
-        } = config || {};
-        const subtotal = getSubTotal(index, reverse);
+        const subtotal = getSubTotal(index, config);
         $(".table" + index).text(subtotal);
       });
     };
@@ -96,10 +153,9 @@
       let total = 0;
       tableConfig.forEach((config, index) => {
         const {
-          reverse,
           skipTotal
         } = config || {};
-        const subtotal = getSubTotal(index, reverse);
+        const subtotal = getSubTotal(index, config);
         total += skipTotal ? 0 : subtotal;
       });
       return total;
@@ -179,7 +235,26 @@
       });
     };
 
-    const tables = getTables();
-    container.append(tables);
+    const start = (type = classRoomConfig) => {
+      tableConfig = type;
+      data = [];
+      $(".total").text(0);
+      container.empty();
+      const tables = getTables();
+      container.append(tables);
+    };
+
+    start();
+
+    $(".nav-tabs").click((e) => {
+      const current = e.target.innerText;
+      if (current === "Home") {
+        start(homeConfig);
+      } else {
+        start();
+      }
+      $(".nav-link").removeClass("active");
+      $(e.target).addClass("active");
+    });
   }
 )();
